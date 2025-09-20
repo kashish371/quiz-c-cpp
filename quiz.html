@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz App - C & C++</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 750px;
+      max-width: 95%;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    h2 {
+      margin-bottom: 20px;
+      white-space: pre-line;
+    }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 10px 0;
+    }
+    .options button {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f9f9f9;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-align: left;
+    }
+    .options button:hover {
+      background: #eaeaea;
+    }
+    #next-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      background: #3498db;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+    }
+    #next-btn:hover {
+      background: #2980b9;
+    }
+    .correct {
+      background: #2ecc71 !important;
+      color: white;
+    }
+    .wrong {
+      background: #e74c3c !important;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2 id="question">Question text</h2>
+    <ul class="options" id="options"></ul>
+    <button id="next-btn">Next</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "Which of the following is not a feature of C++?",
+        options: ["a) Encapsulation","b) Inheritance","c) Polymorphism","d) Reflection"],
+        answer: 3
+      },
+      {
+        q: "What will be the output of the following C++ code?\n\n#include <iostream>\nusing namespace std;\nclass Test {\npublic:\n    Test() { cout << \"Constructor \"; }\n    ~Test() { cout << \"Destructor \"; }\n};\nint main() {\n    Test t1;\n}",
+        options: ["a) Destructor Constructor","b) Constructor Destructor","c) Compiler Error","d) Destructor only"],
+        answer: 1
+      },
+      {
+        q: "What is the default access specifier for members of a class in C++?",
+        options: ["a) public","b) private","c) protected","d) Depends on compiler"],
+        answer: 1
+      },
+      {
+        q: "Which header file is required for using printf() in C?",
+        options: ["a) <conio.h>","b) <iostream>","c) <stdio.h>","d) <stdlib.h>"],
+        answer: 2
+      },
+      {
+        q: "The main() function in C should return which type?",
+        options: ["a) void","b) int","c) float","d) char"],
+        answer: 1
+      },
+      {
+        q: "Which of the following is the correct header file in C++ for cout and cin?",
+        options: ["a) <stdio.h>","b) <conio.h>","c) <iostream>","d) <stdlib.h>"],
+        answer: 2
+      },
+      {
+        q: "Which of the following is used for multiple inheritance in C++?",
+        options: ["a) :","b) ,","c) ;","d) ->"],
+        answer: 1
+      },
+      {
+        q: "Which operator is used to access members of a class using an object?",
+        options: ["a) ->","b) .","c) ::","d) :"],
+        answer: 1
+      },
+      {
+        q: "The format specifier for float in C is:",
+        options: ["a) %d","b) %f","c) %c","d) %s"],
+        answer: 1
+      },
+      {
+        q: "Which loop is guaranteed to execute at least once?",
+        options: ["a) for","b) while","c) do-while","d) none"],
+        answer: 2
+      },
+      {
+        q: "Which operator is used for logical AND in C?",
+        options: ["a) &","b) &&","c) |","d) ||"],
+        answer: 1
+      },
+  
+      {
+        q: "Which of the following is an OOP feature in C++?",
+        options: ["a) Inheritance","b) Functions","c) Pointers","d) Preprocessor"],
+        answer: 0
+      },
+      {
+        q: "Which of the following is a reference operator in C++?",
+        options: ["a) &","b) *","c) ->","d) ::"],
+        answer: 0
+      },
+      {
+        q: "Which feature of OOP allows function names to be reused?",
+        options: ["a) Encapsulation","b) Polymorphism","c) Inheritance","d) Abstraction"],
+        answer: 1
+      },
+      {
+        q: "In C, which storage class is used for variables that retain their value between function calls?",
+        options: ["a) auto","b) static","c) extern","d) register"],
+        answer: 1
+      },
+      {
+        q: "Which of the following correctly declares a pointer to an integer in C?",
+        options: ["a) int p;","b) int *p;","c) int &p;","d) pointer int p;"],
+        answer: 1
+      },
+      {
+        q: "In C, what is the output of:\n\nprintf(\"%d\", sizeof(3.14));",
+        options: ["a) 2","b) 4","c) 8","d) depends on compiler"],
+        answer: 1
+      },
+      {
+        q: "Which of the following is not a valid type of inheritance in C++?",
+        options: ["a) Single","b) Multiple","c) Multilevel","d) Parallel"],
+        answer: 3
+      },
+      {
+        q: "Which of the following allows defining more than one function with the same name in C++?",
+        options: ["a) Function overloading","b) Function overriding","c) Operator overloading","d) Encapsulation"],
+        answer: 0
+      },
+      {
+        q: "In C++, if a base class pointer points to a derived class object, which function is executed if it is declared virtual?",
+        options: ["a) Base class function","b) Derived class function","c) Both","d) None"],
+        answer: 1
+      },
+      {
+        q: "What is the output of the following C code?\n\n#include <stdio.h>\nint main() {\n    int a = 10, b = 20;\n    printf(\"%d\", a + b);\n    return 0;\n}",
+        options: ["a) 10","b) 20","c) 30","d) Error"],
+        answer: 2
+      },
+      {
+        q: "What will this C code print?\n\n#include <stdio.h>\nint main() {\n    int a = 2;\n    printf(\"%d\", a << 1);\n    return 0;\n}",
+        options: ["a) 2","b) 4","c) 1","d) 8"],
+        answer: 1
+      },
+      {
+        q: "Which of the following statements is true about arrays in C?",
+        options: ["a) Array index starts at 0","b) Array index starts at 1","c) Array size must always be 100","d) Arrays can store different data types"],
+        answer: 0
+      },
+      {
+        q: "What is the output of the following code?\n\n#include <iostream>\nusing namespace std;\nint main() {\n    int a = 10, b = 3;\n    cout << a / b;\n    return 0;\n}",
+        options: ["a) 3","b) 3.33","c) 10/3","d) Error"],
+        answer: 0
+      },
+      {
+        q: "What will this code output?\n\n#include <iostream>\nusing namespace std;\nint main() {\n    int x = 5;\n    cout << x++ << \" \" << ++x;\n    return 0;\n}",
+        options: ["a) 5 6","b) 5 7","c) 6 6","d) 6 7"],
+        answer: 1
+      },
+      {
+        q: "What is the output?\n\n#include <stdio.h>\nint main() {\n    int arr[] = {10, 20, 30, 40};\n    printf(\"%d\", *(arr + 2));\n    return 0;\n}",
+        options: ["a) 10","b) 20","c) 30","d) 40"],
+        answer: 2
+      },
+      {
+        q: "What will be printed?\n\n#include <stdio.h>\nint main() {\n    int i = 0;\n    for(; i < 3; i++);\n    printf(\"%d\", i);\n    return 0;\n}",
+        options: ["a) 2","b) 3","c) 4","d) 0"],
+        answer: 1
+      },
+      {
+        q: "What is the output?\n\n#include <iostream>\nusing namespace std;\nint main() {\n    string s = \"Hello\";\n    cout << s.length();\n}",
+        options: ["a) 4","b) 5","c) 6","d) Error"],
+        answer: 1
+      },
+      {
+        q: "Output?\n\n#include <iostream>\nusing namespace std;\nint main() {\n    int a = 5;\n    cout << (a > 2 && a < 10);\n    return 0;\n}",
+        options: ["a) 0","b) 1","c) true","d) Error"],
+        answer: 1
+      },
+      {
+        q: "Output of this recursive C function?\n\n#include <stdio.h>\nint fun(int n) {\n    if (n == 0) return 1;\n    return n * fun(n-1);\n}\nint main() {\n    printf(\"%d\", fun(4));\n}",
+        options: ["a) 4","b) 16","c) 24","d) Error"],
+        answer: 2
+      },
+      {
+        q: "What will be printed?\n\n#include <stdio.h>\nint main() {\n    int a = 1;\n    switch(a) {\n        case 1: printf(\"One\"); break;\n        default: printf(\"Default\");\n    }\n}",
+        options: ["a) One","b) Default","c) Error","d) Nothing"],
+        answer: 0
+      },
+      {
+        q: "What is the output?\n\n#include <iostream>\nusing namespace std;\nint main() {\n    for(int i=0; i<5; i++) {\n        if(i==3) break;\n        cout << i;\n    }\n}",
+        options: ["a) 012","b) 0123","c) 01234","d) Error"],
+        answer: 0
+      },
+      {
+    q: `Predict the output:
+
+#include <stdio.h>
+int main() {
+    int x = 0;
+    if (x = 5)
+        printf("True");
+    else
+        printf("False");
+    return 0;
+}`,
+    options: ["a) True", "b) False", "c) Error", "d) Garbage value"],
+    answer: 0
+  },
+  {
+    q: `Which of the following is true about function overloading in C++?`,
+    options: [
+      "a) Functions must differ only in return type",
+      "b) Functions must differ in number or type of arguments",
+      "c) Functions must have different names",
+      "d) Functions cannot be overloaded"
+    ],
+    answer: 1
+  },
+  {
+    q: `What will the following code output?
+
+#include <iostream>
+using namespace std;
+class Base {
+public:
+    virtual void show() { cout << "Base"; }
+};
+class Derived : public Base {
+public:
+    void show() { cout << "Derived"; }
+};
+int main() {
+    Base* b;
+    Derived d;
+    b = &d;
+    b->show();
+    return 0;
+}`,
+    options: ["a) Base", "b) Derived", "c) BaseDerived", "d) Error"],
+    answer: 1
+  },
+  
+  {
+    q: `Which of the following is not a valid identifier in C?`,
+    options: ["a) _value", "b) int1", "c) break", "d) studentName"],
+    answer: 2
+  },
+  {
+    q: `What is the output of the program?
+
+#include <stdio.h>
+int main() {
+    int a = 2, b = 3, c = 4;
+    printf("%d", a < b < c);
+    return 0;
+}`,
+    options: ["a) 1", "b) 0", "c) 2", "d) Error"],
+    answer: 0
+  },
+  {
+    q: `What will be the output?
+
+#include <stdio.h>
+int main() {
+    char s[] = "C-Quiz";
+    printf("%d", sizeof(s));
+    return 0;
+}`,
+    options: ["a) 6", "b) 7", "c) 5", "d) 8"],
+    answer: 1
+  },
+  {
+    q: `Which of the following is not a type of constructor in C++?`,
+    options: [
+      "a) Default constructor",
+      "b) Parameterized constructor",
+      "c) Copy constructor",
+      "d) Virtual constructor"
+    ],
+    answer: 3
+  },
+  {
+    q: `Which of the following is used to make a class abstract in C++?`,
+    options: [
+      "a) Pure virtual function",
+      "b) Constructor",
+      "c) Friend function",
+      "d) Operator overloading"
+    ],
+    answer: 0
+  }
+    ];
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+
+    let currentIndex = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      resetState();
+      let current = questions[currentIndex];
+      questionEl.innerText = (currentIndex+1) + ". " + current.q;
+      current.options.forEach((opt, idx) => {
+        const button = document.createElement("button");
+        button.innerText = opt;
+        button.onclick = () => selectAnswer(idx);
+        optionsEl.appendChild(document.createElement("li")).appendChild(button);
+      });
+    }
+
+    function resetState() {
+      nextBtn.style.display = "none";
+      optionsEl.innerHTML = "";
+    }
+
+    function selectAnswer(idx) {
+      let correct = questions[currentIndex].answer;
+      const buttons = optionsEl.querySelectorAll("button");
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) btn.classList.add("correct");
+        if (i === idx && i !== correct) btn.classList.add("wrong");
+      });
+      if (idx === correct) score++;
+      nextBtn.style.display = "inline-block";
+    }
+
+    function showScore() {
+      resetState();
+      questionEl.innerText = `You scored ${score} out of ${questions.length}!`;
+      nextBtn.innerText = "Restart";
+      nextBtn.style.display = "inline-block";
+    }
+
+    function handleNext() {
+      currentIndex++;
+      if (currentIndex < questions.length) {
+        loadQuestion();
+      } else {
+        showScore();
+      }
+    }
+
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < questions.length) {
+        handleNext();
+      } else {
+        currentIndex = 0;
+        score = 0;
+        nextBtn.innerText = "Next";
+        loadQuestion();
+      }
+    });
+
+    loadQuestion();
+  </script>
+</body>
+</html>
